@@ -255,8 +255,11 @@ const shortcuts = {
 	"<": "prefix",
 	">": "suffix",
 	"#": "id",
-	"[": "help",
+	"[": "options",
 };
+
+// TODO: Use shortcut token constants e.g. TOKEN_TYPE.
+// TODO: Differentiate prefix and prefix icon etc
 
 // Our RegEx tokens, based on our shortcuts.
 const tokens = Object.keys(shortcuts).map(token => `\\${token}`).join("|");
@@ -278,12 +281,23 @@ const formTranslation = computed(() => {
 		let result = [];
 
 		for (let i = 0; i < parts.length; i++) {
-			if (shortcuts[parts[i]]) {
-				result.push({ token: shortcuts[parts[i]], content: parts[i + 1] });
+			const token = shortcuts[parts[i]];
 
-				// Skip the next match as it has been already used as content
-				i++;
+			let content = parts[i + 1];
+
+			if (!isNonEmptyString(token)|| !isNonEmptyString(content)) {
+				continue;
 			}
+
+			// Remove any trailing square bracket for options.
+			if (token === "options") {
+				content = content.replace("]", "");
+			}
+
+			result.push({ token, content });
+
+			// Skip the next match as it has been already used as content
+			i++;
 		}
 
 		return result;
