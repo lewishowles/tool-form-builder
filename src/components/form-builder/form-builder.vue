@@ -29,7 +29,7 @@
 						</template>
 
 						<template #shortcut>
-							{{ TOKEN_NAME }}
+							{{ tokens.NAME }}
 						</template>
 
 						<p>
@@ -43,7 +43,7 @@
 						</template>
 
 						<template #shortcut>
-							{{ TOKEN_TYPE }}
+							{{ tokens.TYPE }}
 						</template>
 
 						<div class="flex flex-col gap-2">
@@ -54,37 +54,37 @@
 							<dl class="grid grid-cols-[5em_1fr]">
 								<dt>
 									<pill-badge colour="purple" class="font-mono">
-										{{ TOKEN_TYPE }}{{ INPUT_TEXT }}
+										{{ tokens.TYPE }}{{ inputTokens.TEXT }}
 									</pill-badge>
 								</dt>
 								<dd>input</dd>
 								<dt>
 									<pill-badge colour="purple" class="font-mono">
-										{{ TOKEN_TYPE }}{{ INPUT_TEXTAREA }}
+										{{ tokens.TYPE }}{{ inputTokens.TEXTAREA }}
 									</pill-badge>
 								</dt>
 								<dd>textarea</dd>
 								<dt>
 									<pill-badge colour="purple" class="font-mono">
-										{{ TOKEN_TYPE }}{{ INPUT_SELECT }}
+										{{ tokens.TYPE }}{{ inputTokens.SELECT }}
 									</pill-badge>
 								</dt>
 								<dd>select</dd>
 								<dt>
 									<pill-badge colour="purple" class="font-mono">
-										{{ TOKEN_TYPE }}{{ INPUT_CHECKBOX }}
+										{{ tokens.TYPE }}{{ inputTokens.CHECKBOX }}
 									</pill-badge>
 								</dt>
 								<dd>checkbox</dd>
 								<dt>
 									<pill-badge colour="purple" class="font-mono">
-										{{ TOKEN_TYPE }}{{ INPUT_RADIO_GROUP }}
+										{{ tokens.TYPE }}{{ inputTokens.RADIO_GROUP }}
 									</pill-badge>
 								</dt>
 								<dd>radio group</dd>
 								<dt>
 									<pill-badge colour="purple" class="font-mono">
-										{{ TOKEN_TYPE }}{{ INPUT_BUTTON_GROUP }}
+										{{ tokens.TYPE }}{{ inputTokens.BUTTON_GROUP }}
 									</pill-badge>
 								</dt>
 								<dd>button group</dd>
@@ -141,7 +141,7 @@
 						</template>
 
 						<template #shortcut>
-							{{ TOKEN_HELP }}
+							{{ tokens.HELP }}
 						</template>
 
 						<p>Any help text to provide for the current field.</p>
@@ -153,7 +153,7 @@
 						</template>
 
 						<template #shortcut>
-							{{ TOKEN_PLACEHOLDER }}
+							{{ tokens.PLACEHOLDER }}
 						</template>
 
 						<p>
@@ -167,7 +167,7 @@
 						</template>
 
 						<template #shortcut>
-							{{ TOKEN_PREFIX }}
+							{{ tokens.PREFIX }}
 						</template>
 
 						<div class="flex flex-col gap-2">
@@ -185,7 +185,7 @@
 						</template>
 
 						<template #shortcut>
-							{{ TOKEN_SUFFIX }}
+							{{ tokens.SUFFIX }}
 						</template>
 
 						<div class="flex flex-col gap-2">
@@ -203,7 +203,7 @@
 						</template>
 
 						<template #shortcut>
-							{{ TOKEN_ID }}
+							{{ tokens.ID }}
 						</template>
 
 						<p>
@@ -229,110 +229,16 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
-import { isNonEmptyString } from "@lewishowles/helpers/string";
+import { ref } from "vue";
 import { useClipboard } from "@vueuse/core";
 
 import FormBuilderShortcut from "./fragments/form-builder-shortcut.vue";
+import useConfiguration from "./composables/use-configuration";
 
 const { copy, copied, isSupported } = useClipboard();
 
 // Our original code, provided by the user. This is what we are converting.
 const userInput = ref("Your name?Your name will only be used to identify your account");
 
-// Our available tokens.
-const TOKEN_TYPE = "/";
-const TOKEN_NAME = "@";
-const TOKEN_HELP = "?";
-const TOKEN_PLACEHOLDER = "|";
-const TOKEN_PREFIX = "<";
-const TOKEN_SUFFIX = ">";
-const TOKEN_ID = "#";
-const TOKEN_OPTIONS = "[";
-
-// Our conversion table from token to configuration attribute.
-const tokenMap = {
-	[TOKEN_TYPE]: "type",
-	[TOKEN_NAME]: "name",
-	[TOKEN_HELP]: "help",
-	[TOKEN_PLACEHOLDER]: "placeholder",
-	[TOKEN_PREFIX]: "prefix",
-	[TOKEN_SUFFIX]: "suffix",
-	[TOKEN_ID]: "id",
-	[TOKEN_OPTIONS]: "options",
-};
-
-// Our available input tokens.
-const INPUT_TEXT = "i";
-const INPUT_TEXTAREA = "ta";
-const INPUT_SELECT = "s";
-const INPUT_CHECKBOX = "cb";
-const INPUT_RADIO_GROUP = "rbg";
-const INPUT_BUTTON_GROUP = "bg";
-
-// Our conversion table from input token to form-field input type.
-const inputMap = {
-	[INPUT_TEXT]: "text",
-	[INPUT_TEXTAREA]: "textarea",
-	[INPUT_SELECT]: "select",
-	[INPUT_CHECKBOX]: "checkbox",
-	[INPUT_RADIO_GROUP]: "radio-group",
-	[INPUT_BUTTON_GROUP]: "button-group",
-};
-
-// TODO: Differentiate prefix and prefix icon etc
-
-// Our RegEx tokens, based on our shortcuts.
-const tokenList = Object.keys(tokenMap).map(token => `\\${token}`).join("|");
-const tokenRegex = new RegExp(`(${tokenList})`, "g");
-
-// A programmatic conversion of the user's input into a re-usable configuration,
-// which we can use to build our form code.
-const formConfiguration = computed(() => {
-	if (!isNonEmptyString(userInput.value)) {
-		return "";
-	}
-
-	// Start by splitting our configuration, expecting one input per line.
-	const configurationLines = userInput.value.split("\n");
-
-	return configurationLines.map(line => {
-		// This splits our line into a list of token, content, token, content,
-		// etc.
-		const parts = line.split(tokenRegex);
-
-		let result = [{ attribute: "label", content: parts[0] }];
-
-		for (let i = 1; i < parts.length; i++) {
-			const attribute = tokenMap[parts[i]];
-
-			let content = parts[i + 1];
-
-			if (!isNonEmptyString(attribute)|| !isNonEmptyString(content)) {
-				continue;
-			}
-
-			switch (attribute) {
-				case "type":
-					content = inputMap[content] || "text";
-
-					break;
-				// We treat options a little differently, allowing the user to
-				// type them in a more familiar format, but splitting them as we
-				// would other tokens.
-				case "options":
-					content = content.replace("]", "");
-
-					break;
-			}
-
-			result.push({ attribute, content });
-
-			// Skip the next match as it has been already used as content
-			i++;
-		}
-
-		return result;
-	});
-});
+const { tokens, inputTokens, formConfiguration } = useConfiguration(userInput);
 </script>
