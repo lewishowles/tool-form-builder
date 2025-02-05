@@ -8,20 +8,11 @@ describe("useConfiguration", () => {
 				const { formConfiguration } = useConfiguration("Your name/t?Your name will only be used to identify your account");
 
 				expect(formConfiguration.value).toEqual([
-					[
-						{
-							attribute: "label",
-							content: "Your name",
-						},
-						{
-							attribute: "type",
-							content: "text",
-						},
-						{
-							attribute: "help",
-							content: "Your name will only be used to identify your account",
-						},
-					],
+					{
+						label: "Your name",
+						type: "text",
+						help: "Your name will only be used to identify your account",
+					},
 				]);
 			});
 
@@ -29,16 +20,10 @@ describe("useConfiguration", () => {
 				const { formConfiguration } = useConfiguration("Your name");
 
 				expect(formConfiguration.value).toEqual([
-					[
-						{
-							attribute: "label",
-							content: "Your name",
-						},
-						{
-							attribute: "type",
-							content: "text",
-						},
-					],
+					{
+						label: "Your name",
+						type: "text",
+					},
 				]);
 			});
 
@@ -46,30 +31,15 @@ describe("useConfiguration", () => {
 				const { formConfiguration } = useConfiguration("Your name/t?Your name will only be used to identify your account\nAbout you/ta");
 
 				expect(formConfiguration.value).toEqual([
-					[
-						{
-							attribute: "label",
-							content: "Your name",
-						},
-						{
-							attribute: "type",
-							content: "text",
-						},
-						{
-							attribute: "help",
-							content: "Your name will only be used to identify your account",
-						},
-					],
-					[
-						{
-							attribute: "label",
-							content: "About you",
-						},
-						{
-							attribute: "type",
-							content: "textarea",
-						},
-					],
+					{
+						label: "Your name",
+						type: "text",
+						help: "Your name will only be used to identify your account",
+					},
+					{
+						label: "About you",
+						type: "textarea",
+					},
 				]);
 			});
 
@@ -86,22 +56,37 @@ describe("useConfiguration", () => {
 					const { formConfiguration } = useConfiguration(`Field label/t${token}content`);
 
 					expect(formConfiguration.value).toEqual([
-						[
-							{
-								attribute: "label",
-								content: "Field label",
-							},
-							{
-								attribute: "type",
-								content: "text",
-							},
-							{
-								attribute,
-								content: "content",
-							},
-						],
+						{
+							label: "Field label",
+							type: "text",
+							[attribute]: "content",
+						},
 					]);
 				});
+			});
+
+			test("should recognise a prefix icon", () => {
+				const { formConfiguration } = useConfiguration("Field label/t<icon-user");
+
+				expect(formConfiguration.value).toEqual([
+					{
+						label: "Field label",
+						type: "text",
+						prefix_icon: "icon-user",
+					},
+				]);
+			});
+
+			test("should recognise a suffix icon", () => {
+				const { formConfiguration } = useConfiguration("Field label/t>icon-user");
+
+				expect(formConfiguration.value).toEqual([
+					{
+						label: "Field label",
+						type: "text",
+						suffix_icon: "icon-user",
+					},
+				]);
 			});
 
 			describe("should recognise each input type", () => {
@@ -116,16 +101,10 @@ describe("useConfiguration", () => {
 					const { formConfiguration } = useConfiguration(`Field label/${typeToken}`);
 
 					expect(formConfiguration.value).toEqual([
-						[
-							{
-								attribute: "label",
-								content: "Field label",
-							},
-							{
-								attribute: "type",
-								content: type,
-							},
-						],
+						{
+							label: "Field label",
+							type: type,
+						},
 					]);
 				});
 			});

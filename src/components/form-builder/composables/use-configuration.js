@@ -75,7 +75,7 @@ export default function useConfiguration(input) {
 			// content], etc.
 			const parts = line.split(tokenRegex);
 
-			let result = [{ attribute: "label", content: parts[0] }];
+			let field = { label: parts[0] };
 
 			for (let i = 1; i < parts.length; i += 2) {
 				let attribute = tokenMap[parts[i]];
@@ -102,24 +102,22 @@ export default function useConfiguration(input) {
 					case "prefix":
 					case "suffix":
 						if (content.startsWith("icon-")) {
-							attribute = `${attribute}-icon`;
+							attribute = `${attribute}_icon`;
 						}
 
 						break;
 				}
 
-				result.push({ attribute, content });
+				field[attribute] = content;
 			}
 
 			// So that we don't need ot make any assumptions going forward, if
 			// we cannot find a type, add our default.
-			const hasTypeAttribute = result.some(item => item.attribute === "type");
-
-			if (!hasTypeAttribute) {
-				result.push({ attribute: "type", content: "text" });
+			if (!Object.hasOwn(field, "type")) {
+				field.type = "text";
 			}
 
-			return result;
+			return field;
 		});
 	});
 

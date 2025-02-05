@@ -224,6 +224,7 @@
 			</span>
 		</ui-button>
 
+		<pre class="text-sm">{{ formTemplate }}</pre>
 		<pre class="text-sm">{{ formConfiguration }}</pre>
 	</div>
 </template>
@@ -234,11 +235,16 @@ import { useClipboard } from "@vueuse/core";
 
 import FormBuilderShortcut from "./fragments/form-builder-shortcut.vue";
 import useConfiguration from "./composables/use-configuration";
+import useTemplateGenerator from "./composables/use-template-generator";
 
 const { copy, copied, isSupported } = useClipboard();
 
 // Our original code, provided by the user. This is what we are converting.
 const userInput = ref("Your name?Your name will only be used to identify your account");
 
+// Convert our user input into a standardised configuration, which we will use
+// to generate our code.
 const { tokens, inputTokens, formConfiguration } = useConfiguration(userInput);
+
+const { formTemplate } = useTemplateGenerator(formConfiguration);
 </script>
