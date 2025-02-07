@@ -51,7 +51,6 @@ describe("useConfiguration", () => {
 					["prefix", "<"],
 					["suffix", ">"],
 					["id", "#"],
-					["options", "["],
 				])("%s", ([attribute, token]) => {
 					const { formConfiguration } = useConfiguration(`Field label/t${token}content`);
 

@@ -11,7 +11,6 @@ const tokens = {
 	PREFIX: "<",
 	SUFFIX: ">",
 	ID: "#",
-	OPTIONS: "[",
 };
 
 // Our conversion table from token to configuration attribute.
@@ -23,7 +22,6 @@ const tokenMap = {
 	[tokens.PREFIX]: "prefix",
 	[tokens.SUFFIX]: "suffix",
 	[tokens.ID]: "id",
-	[tokens.OPTIONS]: "options",
 };
 
 // Our available input tokens.
@@ -88,13 +86,6 @@ export default function useConfiguration(input) {
 				switch (attribute) {
 					case "type":
 						content = inputMap[content] || "text";
-
-						break;
-					// We treat options a little differently, allowing the user
-					// to type them in a more familiar format, but splitting
-					// them as we would other tokens.
-					case "options":
-						content = content.replace("]", "");
 
 						break;
 					// For a prefix and suffix, if the content starts with

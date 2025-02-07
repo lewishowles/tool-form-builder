@@ -94,47 +94,6 @@
 						</div>
 					</form-builder-shortcut>
 
-					<form-builder-shortcut v-bind="{ colour: 'green' }">
-						<template #title>
-							Options
-						</template>
-
-						<template #shortcut>
-							[]
-						</template>
-
-						<div class="flex flex-col gap-2">
-							<p>Options for the current field, which can take two forms. Note that this only applies to <code>select</code>, <code>checkbox group</code>, or <code>radio</code> fields.</p>
-
-							<p>Options can take two forms:</p>
-
-							<dl>
-								<dt class="font-bold">
-									Simple
-								</dt>
-								<dd class="mb-4">
-									<p class="mb-2">
-										Where labels and values are the same.
-									</p>
-									<span class="text-green-600 font-mono">
-										[value one,value two]
-									</span>
-								</dd>
-								<dt class="font-bold">
-									Complete
-								</dt>
-								<dd>
-									<p class="mb-2">
-										Where labels and values are defined separately.
-									</p>
-									<span class="text-green-600 font-mono">
-										[Label one=value one,Label two=value two]
-									</span>
-								</dd>
-							</dl>
-						</div>
-					</form-builder-shortcut>
-
 					<form-builder-shortcut v-bind="{ colour: 'blue' }">
 						<template #title>
 							Help
@@ -214,7 +173,7 @@
 			</div>
 		</summary-details>
 
-		<ui-button v-if="isSupported" class="button--muted relative mb-8" @click="copy(form)">
+		<ui-button v-if="isSupported" class="button--muted relative mb-8" @click="copy(formTemplate)">
 			<span :class="{ 'invisible': copied }">
 				Copy form code
 			</span>
@@ -225,7 +184,6 @@
 		</ui-button>
 
 		<pre class="text-sm">{{ formTemplate }}</pre>
-		<pre class="text-sm">{{ formConfiguration }}</pre>
 	</div>
 </template>
 
