@@ -27,7 +27,7 @@
 
 	<template #${e}>
 		${t}
-	</template>`}const Zh={class:"rounded border border-grey-100 bg-grey-50 px-4 py-3"},Qh={class:"space-y-4 divide-y divide-grey-200"},eg={class:"flex flex-col gap-2"},tg={class:"grid grid-cols-[5em_1fr]"},ng={class:"text-sm"},rg={__name:"form-builder",setup(e){const{copy:t,copied:n,isSupported:r}=Uh(),l=X("Your name?Your name will only be used to identify your account"),{tokens:s,inputTokens:o,formConfiguration:i}=zh(l),{formFieldsString:a}=Gh(i),u=w(()=>sr(a.value)?`<form-wrapper v-model="" @submit="">
+	</template>`}const Zh={class:"rounded border border-grey-100 bg-grey-50 px-4 py-3"},Qh={class:"space-y-4 divide-y divide-grey-200"},eg={class:"flex flex-col gap-2"},tg={class:"grid grid-cols-[5em_1fr]"},ng={class:"text-sm"},rg={__name:"form-builder",setup(e){const{copy:t,copied:n,isSupported:r}=Uh(),l=X("Your name@your_name?Your name will only be used to identify your account"),{tokens:s,inputTokens:o,formConfiguration:i}=zh(l),{formFieldsString:a}=Gh(i),u=w(()=>sr(a.value)?`<form-wrapper v-model="" @submit="">
 ${a.value.split(`
 `).map(f=>`	${f}`).join(`
 `)}
