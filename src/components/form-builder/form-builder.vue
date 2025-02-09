@@ -199,7 +199,7 @@ import useTemplateGenerator from "./composables/use-template-generator";
 const { copy, copied, isSupported } = useClipboard();
 
 // Our original code, provided by the user. This is what we are converting.
-const userInput = ref("Your name?Your name will only be used to identify your account");
+const userInput = ref("Your name@your_name?Your name will only be used to identify your account");
 
 // Convert our user input into a standardised configuration, which we will use
 // to generate our code.
