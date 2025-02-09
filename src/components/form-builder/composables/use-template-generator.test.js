@@ -3,7 +3,7 @@ import useTemplateGenerator from "./use-template-generator";
 
 describe("useTemplateGenerator", () => {
 	test("should convert a single field into an appropriate template", () => {
-		const { formTemplate } = useTemplateGenerator([
+		const { formFieldsString } = useTemplateGenerator([
 			{
 				label: "Your name",
 				type: "text",
@@ -11,7 +11,7 @@ describe("useTemplateGenerator", () => {
 			},
 		]);
 
-		expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'text' }">
+		expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'text' }">
 	Your name
 
 	<template #help>
@@ -21,7 +21,7 @@ describe("useTemplateGenerator", () => {
 	});
 
 	test("should convert multiple fields into an appropriate template", () => {
-		const { formTemplate } = useTemplateGenerator([
+		const { formFieldsString } = useTemplateGenerator([
 			{
 				label: "Your name",
 				type: "text",
@@ -33,7 +33,7 @@ describe("useTemplateGenerator", () => {
 			},
 		]);
 
-		expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'text' }">
+		expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'text' }">
 	Your name
 
 	<template #help>
@@ -48,7 +48,7 @@ describe("useTemplateGenerator", () => {
 
 	describe("should recognise each attribute", () => {
 		test("name", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "text",
@@ -56,13 +56,13 @@ describe("useTemplateGenerator", () => {
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'text', name: 'field_name' }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'text', name: 'field_name' }">
 	Field label
 </form-field>`);
 		});
 
 		test("help", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "text",
@@ -70,7 +70,7 @@ describe("useTemplateGenerator", () => {
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'text' }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'text' }">
 	Field label
 
 	<template #help>
@@ -80,7 +80,7 @@ describe("useTemplateGenerator", () => {
 		});
 
 		test("placeholder", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "text",
@@ -88,13 +88,13 @@ describe("useTemplateGenerator", () => {
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'text', placeholder: 'Field placeholder' }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'text', placeholder: 'Field placeholder' }">
 	Field label
 </form-field>`);
 		});
 
 		test("prefix", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "text",
@@ -102,7 +102,7 @@ describe("useTemplateGenerator", () => {
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'text' }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'text' }">
 	Field label
 
 	<template #prefix>
@@ -112,7 +112,7 @@ describe("useTemplateGenerator", () => {
 		});
 
 		test("prefix-icon", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "text",
@@ -120,7 +120,7 @@ describe("useTemplateGenerator", () => {
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'text' }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'text' }">
 	Field label
 
 	<template #prefix>
@@ -130,7 +130,7 @@ describe("useTemplateGenerator", () => {
 		});
 
 		test("suffix", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "text",
@@ -138,7 +138,7 @@ describe("useTemplateGenerator", () => {
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'text' }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'text' }">
 	Field label
 
 	<template #suffix>
@@ -148,7 +148,7 @@ describe("useTemplateGenerator", () => {
 		});
 
 		test("suffix-icon", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "text",
@@ -156,7 +156,7 @@ describe("useTemplateGenerator", () => {
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'text' }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'text' }">
 	Field label
 
 	<template #suffix>
@@ -166,7 +166,7 @@ describe("useTemplateGenerator", () => {
 		});
 
 		test("id", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "text",
@@ -174,7 +174,7 @@ describe("useTemplateGenerator", () => {
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'text', id: 'field-id' }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'text', id: 'field-id' }">
 	Field label
 </form-field>`);
 		});
@@ -182,40 +182,40 @@ describe("useTemplateGenerator", () => {
 
 	describe("should add options for field types that require them", () => {
 		test("select", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "select",
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'select', options }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'select', options }">
 	Field label
 </form-field>`);
 		});
 
 		test("radio-group", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "radio-group",
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'radio-group', options }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'radio-group', options }">
 	Field label
 </form-field>`);
 		});
 
 		test("button-group", () => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type: "button-group",
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: 'button-group', options }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: 'button-group', options }">
 	Field label
 </form-field>`);
 		});
@@ -227,14 +227,14 @@ describe("useTemplateGenerator", () => {
 			["textarea"],
 			["checkbox"],
 		])("%s", ([type]) => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type,
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: '${type}' }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: '${type}' }">
 	Field label
 </form-field>`);
 		});
@@ -246,14 +246,14 @@ describe("useTemplateGenerator", () => {
 			["radio-group"],
 			["button-group"],
 		])("%s", ([type]) => {
-			const { formTemplate } = useTemplateGenerator([
+			const { formFieldsString } = useTemplateGenerator([
 				{
 					label: "Field label",
 					type,
 				},
 			]);
 
-			expect(formTemplate.value).toEqual(`<form-field v-bind="{ type: '${type}', options }">
+			expect(formFieldsString.value).toEqual(`<form-field v-bind="{ type: '${type}', options }">
 	Field label
 </form-field>`);
 		});

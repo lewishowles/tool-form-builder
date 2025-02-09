@@ -173,7 +173,7 @@
 			</div>
 		</summary-details>
 
-		<ui-button v-if="isSupported" class="button--muted relative mb-8" @click="copy(formTemplate)">
+		<ui-button v-if="isSupported" class="button--muted relative mb-8" @click="copy(formString)">
 			<span :class="{ 'invisible': copied }">
 				Copy form code
 			</span>
@@ -183,12 +183,13 @@
 			</span>
 		</ui-button>
 
-		<pre class="text-sm">{{ formTemplate }}</pre>
+		<pre class="text-sm">{{ formString }}</pre>
 	</div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { isNonEmptyString } from "@lewishowles/helpers/string";
 import { useClipboard } from "@vueuse/core";
 
 import FormBuilderShortcut from "./fragments/form-builder-shortcut.vue";
@@ -204,5 +205,26 @@ const userInput = ref("Your name?Your name will only be used to identify your ac
 // to generate our code.
 const { tokens, inputTokens, formConfiguration } = useConfiguration(userInput);
 
-const { formTemplate } = useTemplateGenerator(formConfiguration);
+// Convert our configuration into form field strings, which we can show to the
+// user.
+const { formFieldsString } = useTemplateGenerator(formConfiguration);
+
+// Combine our form fields with a general form wrapper.
+const formString = computed(() => {
+	if (!isNonEmptyString(formFieldsString.value)) {
+		return "";
+	}
+
+	// We split our form field string so that we can indent each line
+	// appropriately to match the form wrapper.
+	const indentedFormFields = formFieldsString.value.split("\n").map(line => `\t${line}`).join("\n");
+
+	return `<form-wrapper v-model="" @submit="">
+${indentedFormFields}
+
+	<template #submit-button-label>
+		Your submit button
+	</template>
+</form-wrapper>`;
+});
 </script>

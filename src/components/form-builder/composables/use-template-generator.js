@@ -14,7 +14,7 @@ export default function useTemplateGenerator(formConfiguration) {
 	const configuration = ref(formConfiguration);
 
 	// Our form template, computed from the provided configuration.
-	const formTemplate = computed(() => {
+	const formFieldsString = computed(() => {
 		if (!isNonEmptyArray(configuration.value)) {
 			return "";
 		}
@@ -37,7 +37,7 @@ export default function useTemplateGenerator(formConfiguration) {
 	});
 
 	return {
-		formTemplate,
+		formFieldsString,
 	};
 }
 
