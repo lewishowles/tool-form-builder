@@ -175,7 +175,7 @@
 
 		<ui-button v-if="isSupported" class="button--muted relative mb-8" @click="copy(formString)">
 			<span :class="{ 'invisible': copied }">
-				Copy form code
+				Copy code
 			</span>
 
 			<span v-show="copied" class="button-padding-y animate-fade-in-up absolute inset-0 text-center" v-bind="{ 'aria-hidden': copied ? null : true }">
@@ -188,9 +188,9 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { isNonEmptyString } from "@lewishowles/helpers/string";
-import { useClipboard } from "@vueuse/core";
+import { useClipboard, useStorage } from "@vueuse/core";
 
 import FormBuilderShortcut from "./fragments/form-builder-shortcut.vue";
 import useConfiguration from "./composables/use-configuration";
@@ -199,7 +199,7 @@ import useTemplateGenerator from "./composables/use-template-generator";
 const { copy, copied, isSupported } = useClipboard();
 
 // Our original code, provided by the user. This is what we are converting.
-const userInput = ref("Your name@your_name?Your name will only be used to identify your account");
+const userInput = useStorage("form-builder:user-input", "Your name@your_name?Your name will only be used to identify your account");
 
 // Convert our user input into a standardised configuration, which we will use
 // to generate our code.
