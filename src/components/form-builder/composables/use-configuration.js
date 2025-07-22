@@ -1,5 +1,4 @@
-import { computed, ref } from "vue";
-
+import { computed, ref, unref } from "vue";
 import { isNonEmptyString } from "@lewishowles/helpers/string";
 
 // Our available tokens.
@@ -48,6 +47,8 @@ const inputMap = {
 const tokenList = Object.keys(tokenMap).map(token => `\\${token}`).join("|");
 const tokenRegex = new RegExp(`(${tokenList})`, "g");
 
+const userInput = ref("");
+
 /**
  * Encapsulate the functionality to convert user input to a standardised
  * configuration.
@@ -56,7 +57,11 @@ const tokenRegex = new RegExp(`(${tokenList})`, "g");
  *     The user's form input, to convert into a standardised configuration.
  */
 export default function useConfiguration(input) {
-	const userInput = ref(input);
+	const localInput = unref(input);
+
+	if (isNonEmptyString(localInput)) {
+		userInput.value = localInput;
+	}
 
 	// A programmatic conversion of the user's input into a re-usable
 	// configuration, which we can use to build our form code.
